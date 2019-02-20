@@ -10,6 +10,7 @@ EPOCH = 1
 BATCH_SIZE = 100
 LEARNINT_RATE = 0.1
 NUM_OF_CLASSIFIERS = 10
+BIAS = 0
 
 '''Training
 '''
@@ -18,9 +19,10 @@ for i in range(NUM_OF_CLASSIFIERS): # We need to train 10 models for each i
     parameter = init_parameters([784, 1]) # 1 * (1, 784) list of ndarray
     for epoch in range(EPOCH):      # num of epochs we want, 1 in our case
         for batch, X_t in enumerate(x_train_batch):
-            output = sigmoid(X_t, parameter[0]) #(1, 100)
-            cost, dw = mean_square_cost(X_t, output, y_train_batch_sets[i][batch])
-            parameter[0] -= LEARNINT_RATE * dw.T #updata parameter
+            output = sigmoid(X_t, parameter[0], BIAS) #(1, 100)
+            cost, dw, db = mean_square_cost(X_t, output, y_train_batch_sets[i][batch])
+            parameter[0] -= LEARNINT_RATE * dw.T 
+            b -= LEARNINT_RATE * db #updata parameter
             if not batch % 100:
                 print("model %d cost: " % i + str(cost))
     classifiers.append(parameter)
