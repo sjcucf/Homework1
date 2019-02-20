@@ -30,8 +30,8 @@ def init_parameters(layers):
 # print(len(parameters))
 
 #forward propagation using only logistic regression function
-def sigmoid(X, w):
-    z = np.dot(w, X)
+def sigmoid(X, w, b):
+    z = np.dot(w, X) + b
     # print(z[0][:2])
     res = 1 / (1 + np.exp(-z))
     # print(res[0][:5])
@@ -45,14 +45,16 @@ def mean_square_cost(X, A, Y):
     m = Y.shape[1] 
     cost = (1 / m) * np.sum(np.square(A - Y))
     dw = (1 / m) * np.dot(X, (2 * (A - Y) * A * (1 - A)).T)
-    return cost, dw
+    db = (1 / m) * np.sum((A - Y) * A * (1 - A))
+    return cost, dw, db
     
 def corss_entropy_cost(X, A, Y):
     m = Y.shape[1]
     # print(m)
     cost = (-1 / m) * np.sum(Y * np.log(A) + (1 - Y) * (np.log(1 - A)))
     dw = (1 / m) * np.dot(X, (A - Y).T)
-    return cost, dw
+    db = (1 / m) * np.sum(A - Y)
+    return cost, dw, db
 
 def predict(classifiers, X):
     outputs = []
